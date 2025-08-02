@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-4">📊 CivicTrack Analytics Dashboard</h2>
+
+  <div class="row text-center mb-4">
+    <div class="col-md-3 mb-3">
+      <div class="card p-3">
+        <h5>Total Issues</h5>
+        <h3>{{ total_issues }}</h3>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card p-3">
+        <h5>Resolved</h5>
+        <h3>{{ resolved_issues }}</h3>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card p-3">
+        <h5>Pending</h5>
+        <h3>{{ pending_issues }}</h3>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card p-3">
+        <h5>Anonymous</h5>
+        <h3>{{ anonymous_issues }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-lg-6 mb-4">
+      <div class="card p-3">
+        <h5 class="mb-3">📅 Issues Over Time</h5>
+        <div class="chart-container" style="height: 300px;">
+          <canvas id="lineChart"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 mb-4">
+      <div class="card p-3">
+        <h5 class="mb-3">📌 Issues by Category</h5>
+        <div class="chart-container" style="height: 300px;">
+          <canvas id="barChart"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 mx-auto">
+      <div class="card p-3">
+        <h5 class="mb-3">✅ Resolution Rate</h5>
+        <div class="chart-container" style="height: 300px;">
+          <canvas id="pieChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const months = {{ months|safe }};
+  const monthlyCounts = {{ monthly_counts|safe }};
+  const categoryLabels = {{ category_labels|safe }};
+  const categoryValues = {{ category_values|safe }};
+  const resolved = {{ resolved_issues|default:0 }};
+  const processing = {{ processing_issues|default:0 }};
+  const pending = {{ pending_issues|default:0 }};
+
+  new Chart(document.getElementById('lineChart'), {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Issues Reported',
+        data: monthlyCounts,
+        borderColor: '#1f883d',
+        backgroundColor: '#1f883d33',
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: {
+      labels: categoryLabels,
+      datasets: [{
+        label: 'Issues',
+        data: categoryValues,
+        backgroundColor: '#facc15'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+
+  if ((resolved + processing + pending) === 0) {
+    document.getElementById("pieChart").parentElement.innerHTML = "<p class='text-center text-muted mt-5'>No data available to display resolution rate.</p>";
+  } else {
+    new Chart(document.getElementById('pieChart'), {
+      type: 'pie',
+      data: {
+        labels: ['Resolved', 'Processing', 'Pending'],
+        datasets: [{
+          data: [resolved, processing, pending],
+          backgroundColor: ['#1f883d', '#f59e0b', '#ef4444']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  }
+</script>
+{% endblock %}

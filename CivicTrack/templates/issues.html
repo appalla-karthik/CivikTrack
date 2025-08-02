@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+  <h3 class="mb-4 text-center fw-bold" style="color: var(--primary);">📋 Reported Issues</h3>
+
+  <div class="search-box mb-4 d-flex align-items-center border rounded p-2 shadow-sm bg-white">
+    <i class="bi bi-search me-2 text-dark" onclick="filterIssues()"></i>
+    <input type="text" id="searchInput" class="form-control border-0 shadow-none text-dark bg-white" placeholder="Search by title or category..." oninput="filterIssues()" />
+  </div>
+
+  <div id="issueContainer">
+    {% for issue in issues %}
+    <div class="issue-card card flex-md-row flex-column align-items-stretch mb-4 shadow-sm"
+         data-title="{{ issue.title|lower }}"
+         data-category="{{ issue.get_category_display|lower }}">
+
+      <div class="col-md-4" style="overflow: hidden; border-radius: 0.5rem 0 0 0.5rem;">
+        {% if issue.photos.first %}
+          <img src="{{ issue.photos.first.image.url }}" alt="Issue Image" class="issue-img rounded-start">
+        {% else %}
+          <img src="{% static 'img/no-image.jpg' %}" alt="No Image" class="issue-img rounded-start">
+        {% endif %}
+      </div>
+
+      <div class="col-md-8 p-4 d-flex flex-column justify-content-between bg-white text-dark">
+        <div>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge bg-secondary text-light">{{ issue.get_category_display }}</span>
+            <span class="fw-semibold small 
+              {% if issue.status == 'resolved' %}text-success
+              {% elif issue.status == 'processing' %}text-warning
+              {% elif issue.status == 'pending' %}text-danger
+              {% else %}text-muted
+              {% endif %}">
+              {{ issue.get_status_display }} · {{ issue.created_at|date:"M d, Y" }}
+            </span>
+          </div>
+          <h5 class="fw-bold mb-2" style="font-size: 1.25rem;">📌 {{ issue.title }}</h5>
+          <p class="text-muted mb-2" style="font-size: 1rem;">{{ issue.description|truncatewords:25 }}</p>
+        </div>
+        <div class="text-muted" style="font-size: 0.95rem;">
+          <i class="bi bi-geo-alt-fill me-1"></i> {{ issue.human_location }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="text-center">
+    <a class="btn btn-primary px-4 py-2 fw-semibold mt-3" href="{% url 'report' %}">+ Report New Issue</a>
+  </div>
+</div>
+
+<script>
+  function filterIssues() {
+    const input = document.getElementById("searchInput").value.toLowerCase();
+    const cards = document.querySelectorAll("#issueContainer .issue-card");
+
+    cards.forEach(card => {
+      const title = card.getAttribute("data-title") || '';
+      const category = card.getAttribute("data-category") || '';
+
+      if (title.includes(input) || category.includes(input)) {
+        card.style.display = "flex";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  }
+</script>
+
+<style>
+  :root {
+    --primary: #7f5eff;
+  }
+
+  .search-box input {
+    background: white;
+    font-weight: 500;
+  }
+
+  .issue-card {
+    transition: transform 0.2s ease-in-out;
+    background-color: #ffffff;
+    color: #000000;
+  }
+
+  .issue-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .issue-img {
+    height: 250px;
+    width: 100%;
+    object-fit: cover;
+    border: 1px solid #e0e0e0;
+  }
+
+  @media (max-width: 768px) {
+    .issue-img {
+      border-radius: 0.5rem 0.5rem 0 0 !important;
+    }
+  }
+</style>
+{% endblock content %}

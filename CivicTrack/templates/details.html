@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="text-[color:var(--text)] bg-[color:var(--background)]">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Issue Detail</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1f883d',
+            secondary: '#facc15',
+            danger: '#ef4444',
+            background: '#f9fafb',
+            card: '#ffffffcc',
+            text: '#111827',
+            muted: '#6b7280',
+          },
+          boxShadow: {
+            soft: '0 8px 30px rgba(0, 0, 0, 0.1)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    :root {
+      --primary:   #1f883d;
+      --secondary: #facc15;
+      --danger:    #ef4444;
+      --background:#f3f4f6;
+      --card:      #ffffffcc;
+      --text:      #111827;
+      --muted:     #6b7280;
+    }
+
+    .glass {
+      backdrop-filter: blur(16px);
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen p-6 flex flex-col items-center bg-gradient-to-br from-gray-50 via-white to-gray-100 text-[color:var(--text)]">
+  <div class="glass rounded-3xl shadow-soft max-w-3xl w-full p-8 space-y-6 transition-all duration-300 hover:shadow-2xl">
+    <div class="flex justify-between items-center border-b pb-4 border-gray-200">
+      <h1 class="text-2xl font-bold tracking-tight">🚧 Pothole on Main Road</h1>
+      <span class="text-sm font-semibold text-yellow-500 bg-yellow-100 px-3 py-1 rounded-full shadow">🛠️ In Progress</span>
+    </div>
+
+    <div class="rounded-xl overflow-hidden border border-gray-300 shadow-sm">
+      <img src="{% static 'img/pothole.jpg' %}" alt="Pothole image"
+           class="w-full h-[230px] object-cover transition-transform duration-300 hover:scale-105" />
+    </div>
+
+    <div class="text-sm text-muted flex justify-between">
+      <span>📤 Reported by: <strong>Anonymous</strong></span>
+      <span class="italic">June 02, 2025 • 10:34 AM</span>
+    </div>
+
+    <p class="text-base text-gray-700 leading-relaxed">
+      The main road in C.G. Road, Ahmedabad, is riddled with potholes, making it dangerous and difficult to travel on. Immediate action is required to avoid further inconvenience and accidents.
+    </p>
+
+    <div class="flex justify-between items-center flex-wrap gap-2">
+      <span class="bg-[color:var(--primary)] text-white text-xs px-4 py-1 rounded-full shadow-md uppercase tracking-wider">
+        Conscious Starling
+      </span>
+      <p class="text-sm text-muted">📍 <strong class="text-[color:var(--text)]">C.G. Road, Ahmedabad</strong></p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 mt-4">
+      <div id="map" class="w-full h-44 rounded-xl border border-gray-300 shadow-sm"></div>
+
+      <div>
+        <h2 class="text-lg font-semibold text-[color:var(--text)] mb-3">📝 Activity Log</h2>
+        <ul class="space-y-2 text-sm text-[color:var(--muted)] list-disc list-inside">
+          <li>🕒 Jun 02, 10:34 AM – Reported by user</li>
+          <li>🛠️ Jul 26, 04:00 AM – Assigned to municipal worker</li>
+          <li>✅ Jul 28, 04:15 PM – Marked <span class="text-yellow-500 font-medium">"In Progress"</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6">
+    <a href="#"
+       class="inline-flex items-center gap-2 border border-black text-black text-base font-semibold px-6 py-2 rounded-full hover:bg-black hover:text-white transition duration-200">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      Back
+    </a>
+  </div>
+
+  <script>
+    const map = L.map('map').setView([23.030357, 72.517845], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    L.marker([23.030357, 72.517845]).addTo(map)
+      .bindPopup('📍 C.G. Road, Ahmedabad')
+      .openPopup();
+  </script>
+</body>
+</html>
