@@ -18,15 +18,6 @@ A responsive and visually clean analytics dashboard page for the **CivicTrack** 
 ## 📂 File Structure
 
 
----
-
-## 📸 Screenshot
-
-![Analytics Screenshot](./screenshot.png)
-
-*(Replace with an actual screenshot of your analytics page)*
-
----
 
 ## 🔧 Technologies Used
 
