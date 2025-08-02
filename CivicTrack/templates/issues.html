@@ -5,20 +5,17 @@
 <div class="container py-4">
   <h3 class="mb-4 text-center fw-bold" style="color: var(--primary);">📋 Reported Issues</h3>
 
-  <!-- Search Box -->
   <div class="search-box mb-4 d-flex align-items-center border rounded p-2 shadow-sm bg-white">
     <i class="bi bi-search me-2 text-dark" onclick="filterIssues()"></i>
     <input type="text" id="searchInput" class="form-control border-0 shadow-none text-dark bg-white" placeholder="Search by title or category..." oninput="filterIssues()" />
   </div>
 
-  <!-- Issue Cards -->
   <div id="issueContainer">
     {% for issue in issues %}
     <div class="issue-card card flex-md-row flex-column align-items-stretch mb-4 shadow-sm"
          data-title="{{ issue.title|lower }}"
          data-category="{{ issue.get_category_display|lower }}">
 
-      <!-- Left Side Image -->
       <div class="col-md-4" style="overflow: hidden; border-radius: 0.5rem 0 0 0.5rem;">
         {% if issue.photos.first %}
           <img src="{{ issue.photos.first.image.url }}" alt="Issue Image" class="issue-img rounded-start">
@@ -27,7 +24,6 @@
         {% endif %}
       </div>
 
-      <!-- Right Side Description -->
       <div class="col-md-8 p-4 d-flex flex-column justify-content-between bg-white text-dark">
         <div>
           <div class="d-flex justify-content-between align-items-center mb-2">
@@ -52,13 +48,11 @@
     {% endfor %}
   </div>
 
-  <!-- Report Button -->
   <div class="text-center">
     <a class="btn btn-primary px-4 py-2 fw-semibold mt-3" href="{% url 'report' %}">+ Report New Issue</a>
   </div>
 </div>
 
-<!-- JavaScript Filter Function -->
 <script>
   function filterIssues() {
     const input = document.getElementById("searchInput").value.toLowerCase();
@@ -77,7 +71,6 @@
   }
 </script>
 
-<!-- Custom CSS -->
 <style>
   :root {
     --primary: #7f5eff;

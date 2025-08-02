@@ -6,7 +6,6 @@
   <title>CivicTrack - Settings</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-
   <style>
     :root {
       --primary: #1f883d;
@@ -17,13 +16,11 @@
       --text: #111827;
       --muted: #6b7280;
     }
-
     body {
       background: linear-gradient(to right, #e8f5e9, #d0f4de);
       font-family: 'Segoe UI', sans-serif;
       color: var(--text);
     }
-
     .card {
       background: var(--card);
       border-radius: 18px;
@@ -31,45 +28,37 @@
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
       backdrop-filter: blur(10px);
     }
-
     .form-control,
     .form-select {
       border-radius: 12px;
       background-color: #f9fafb;
     }
-
     .form-control:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 0.2rem rgba(31, 136, 61, 0.2);
     }
-
     .btn-primary {
       background-color: var(--primary);
       border: none;
       border-radius: 50px;
       font-weight: 600;
     }
-
     .btn-primary:hover {
       background-color: #166534;
     }
-
     .btn-outline-danger {
       color: var(--danger);
       border-color: var(--danger);
       border-radius: 12px;
     }
-
     .btn-outline-danger:hover {
       background-color: var(--danger);
       color: #fff;
     }
-
     .form-check-input:checked {
       background-color: var(--primary);
       border-color: var(--primary);
     }
-
     .back-btn {
       display: inline-flex;
       align-items: center;
@@ -83,55 +72,44 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
       transition: background 0.3s;
     }
-
     .back-btn:hover {
       background-color: #e2e8f0;
       text-decoration: none;
     }
-
     h5 {
       font-weight: 600;
     }
-
     body.dark-mode {
       background: #121212;
       color: #f1f1f1;
     }
-
     body.dark-mode .card {
       background: #1e1e1e;
       color: #f1f1f1;
     }
-
     body.dark-mode .form-control,
     body.dark-mode .form-select {
       background-color: #2a2a2a;
       color: #f1f1f1;
     }
-
     body.dark-mode .form-control::placeholder {
       color: #bbbbbb;
     }
-
     body.dark-mode .form-check-label {
       color: #f1f1f1;
     }
-
     body.dark-mode .btn-outline-danger {
       color: #ff6b6b;
       border-color: #ff6b6b;
     }
-
     body.dark-mode .btn-outline-danger:hover {
       background-color: #ff6b6b;
       color: #fff;
     }
-
     body.dark-mode .back-btn {
       background-color: #2e2e2e;
       color: #f1f1f1;
     }
-
     body.dark-mode .back-btn:hover {
       background-color: #444;
     }
@@ -139,7 +117,6 @@
 </head>
 
 <body>
-
 <div class="container py-5">
   <div class="mb-4">
     <a href="{% url 'home' %}" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>

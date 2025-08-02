@@ -3,90 +3,82 @@
 
 {% block content %}
 <div class="container py-2">
-
-  <!-- Dashboard Header -->
-  <!-- Dashboard Overview -->
-<div class="mb-2">
-  <h2 class="fw-semibold mb-3">Dashboard Overview</h2>
-  <div class="row g-4">
-    <div class="col-md-4">
-      <div class="card shadow-sm border-0">
-        <div class="card-body">
-          <h5 class="card-title">Total Issues</h5>
-          <p class="fs-3 text-primary fw-bold">{{ total_issues }}</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card shadow-sm border-0">
-        <div class="card-body">
-          <h5 class="card-title">In Progress</h5>
-          <p class="fs-3 text-warning fw-bold">{{ in_progress }}</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card shadow-sm border-0">
-        <div class="card-body">
-          <h5 class="card-title">Resolved</h5>
-          <p class="fs-3 text-success fw-bold">{{ resolved }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Recent Issues from Database -->
-<section class="my-5">
-  <h2 class="mb-4">Recent Issues</h2>
-  <div class="row g-4">
-    {% for issue in issues %}
-
-    <div class="col-sm-12 col-md-6 col-lg-4" data-aos="fade-up">
-      <div class="card h-100 shadow-sm border-0">
-        {% if issue.photos.first %}
-        <div class="card-img-top overflow-hidden" style="height: 200px;">
-          <img src="{{ issue.photos.first.image.url }}" class="w-100 h-100" style="object-fit: cover;" alt="Issue Image">
-        </div>
-        {% endif %}
-        <div class="card-body">
-          <div class="d-flex justify-content-between mb-2">
-            <span class="badge bg-light text-dark">{{ issue.get_category_display }}</span>
-            <span class="badge 
-              {% if issue.status == 'reported' %} bg-secondary 
-              {% elif issue.status == 'in_progress' %} bg-warning text-dark 
-              {% elif issue.status == 'resolved' %} bg-success text-white 
-              {% endif %}
-            ">
-              {{ issue.get_status_display }}
-            </span>
+  <div class="mb-2">
+    <h2 class="fw-semibold mb-3">Dashboard Overview</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title">Total Issues</h5>
+            <p class="fs-3 text-primary fw-bold">{{ total_issues }}</p>
           </div>
-          <h5 class="card-title fw-semibold">
-            {{ issue.title }}
-          </h5>
-          <p class="text-muted">{{ issue.description|truncatechars:100 }}</p>
-          <div class="d-flex justify-content-between">
-            <small class="text-muted">
-              <i class="bi bi-clock me-1"></i>{{ issue.created_at|date:"M d, Y" }}
-            </small>
-            <small class="fw-medium text-dark">
-              {% if issue.is_anonymous %}Anonymous{% else %}{{ issue.user.username }}{% endif %}
-            </small>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title">In Progress</h5>
+            <p class="fs-3 text-warning fw-bold">{{ in_progress }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title">Resolved</h5>
+            <p class="fs-3 text-success fw-bold">{{ resolved }}</p>
           </div>
         </div>
       </div>
     </div>
-    {% empty %}
-    <p>No issues reported yet.</p>
-    {% endfor %}
   </div>
-</section>
 
-
+  <section class="my-5">
+    <h2 class="mb-4">Recent Issues</h2>
+    <div class="row g-4">
+      {% for issue in issues %}
+      <div class="col-sm-12 col-md-6 col-lg-4" data-aos="fade-up">
+        <div class="card h-100 shadow-sm border-0">
+          {% if issue.photos.first %}
+          <div class="card-img-top overflow-hidden" style="height: 200px;">
+            <img src="{{ issue.photos.first.image.url }}" class="w-100 h-100" style="object-fit: cover;" alt="Issue Image">
+          </div>
+          {% endif %}
+          <div class="card-body">
+            <div class="d-flex justify-content-between mb-2">
+              <span class="badge bg-light text-dark">{{ issue.get_category_display }}</span>
+              <span class="badge 
+                {% if issue.status == 'reported' %} bg-secondary 
+                {% elif issue.status == 'in_progress' %} bg-warning text-dark 
+                {% elif issue.status == 'resolved' %} bg-success text-white 
+                {% endif %}
+              ">
+                {{ issue.get_status_display }}
+              </span>
+            </div>
+            <h5 class="card-title fw-semibold">{{ issue.title }}</h5>
+            <p class="text-muted">{{ issue.description|truncatechars:100 }}</p>
+            <div class="d-flex justify-content-between">
+              <small class="text-muted">
+                <i class="bi bi-clock me-1"></i>{{ issue.created_at|date:"M d, Y" }}
+              </small>
+              <small class="fw-medium text-dark">
+                {% if issue.is_anonymous %}Anonymous{% else %}{{ issue.user.username }}{% endif %}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p>No issues reported yet.</p>
+      {% endfor %}
+    </div>
+  </section>
 </div>
 {% endblock %}
 
-<script>function filterIssues() {
+<script>
+function filterIssues() {
   const input = document.getElementById("searchInput").value.toLowerCase();
   const cards = document.querySelectorAll("#issueContainer .issue-card");
 

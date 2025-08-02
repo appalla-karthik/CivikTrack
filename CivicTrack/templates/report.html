@@ -8,9 +8,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Toastify CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
   <title>Report New Issue - CivicTrack</title>
   <style>
     :root {
@@ -87,12 +85,11 @@
     }
 
     .submit-btn:hover {
-  background-color: #634cff;
-  color: white; /* Force white text */
-  transform: translateY(-2px);  
-  box-shadow: 0 6px 18px rgba(127, 94, 255, 0.3);
-}
-
+      background-color: #634cff;
+      color: white;
+      transform: translateY(-2px);  
+      box-shadow: 0 6px 18px rgba(127, 94, 255, 0.3);
+    }
 
     label {
       margin-top: 0.85rem;
@@ -124,7 +121,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 
-<!-- Toastify JS -->
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 {% if messages %}
@@ -148,95 +144,86 @@
       <i class="bi bi-bug-fill"></i> Report New Issue
     </div>
     <form method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
+      {% csrf_token %}
 
-  <label class="form-label">Add/Upload Photos</label>
-  <input type="file" class="form-control" name="photos[]" accept="image/*" multiple required />
+      <label class="form-label">Add/Upload Photos</label>
+      <input type="file" class="form-control" name="photos[]" accept="image/*" multiple required />
 
-  <label class="form-label">Title</label>
-  <input type="text" class="form-control" name="title" required />
+      <label class="form-label">Title</label>
+      <input type="text" class="form-control" name="title" required />
 
-  <label class="form-label">Description</label>
-  <textarea class="form-control" name="description" rows="3" required></textarea>
+      <label class="form-label">Description</label>
+      <textarea class="form-control" name="description" rows="3" required></textarea>
 
-  <label class="form-label">Location</label>
-  <div id="map"></div>
-  <input type="hidden" name="latitude" id="latitude" />
-  <input type="hidden" name="longitude" id="longitude" />
+      <label class="form-label">Location</label>
+      <div id="map"></div>
+      <input type="hidden" name="latitude" id="latitude" />
+      <input type="hidden" name="longitude" id="longitude" />
 
-  <label class="form-label">Category</label>
-  <select class="form-select" name="category" required>
-    <option value="">Select</option>
-    <option value="potholes">Roads - Potholes</option>
-    <option value="obstructions">Roads - Obstructions</option>
-    <option value="lighting">Lighting - Broken/Flickering</option>
-    <option value="leaks">Water Supply - Leaks</option>
-    <option value="low_pressure">Water Supply - Low Pressure</option>
-    <option value="garbage">Cleanliness - Garbage Overflow</option>
-    <option value="safety">Public Safety - Hazards</option>
-    <option value="fallen_trees">Obstructions - Fallen Trees</option>
-  </select>
+      <label class="form-label">Category</label>
+      <select class="form-select" name="category" required>
+        <option value="">Select</option>
+        <option value="potholes">Roads - Potholes</option>
+        <option value="obstructions">Roads - Obstructions</option>
+        <option value="lighting">Lighting - Broken/Flickering</option>
+        <option value="leaks">Water Supply - Leaks</option>
+        <option value="low_pressure">Water Supply - Low Pressure</option>
+        <option value="garbage">Cleanliness - Garbage Overflow</option>
+        <option value="safety">Public Safety - Hazards</option>
+        <option value="fallen_trees">Obstructions - Fallen Trees</option>
+      </select>
 
-  <div class="form-check mt-3">
-    <input type="checkbox" class="form-check-input mt-1 me-2" name="is_anonymous" id="anonymous">
-    <label class="form-check-label mt-0" for="anonymous">Report Anonymously</label>
+      <div class="form-check mt-3">
+        <input type="checkbox" class="form-check-input mt-1 me-2" name="is_anonymous" id="anonymous">
+        <label class="form-check-label mt-0" for="anonymous">Report Anonymously</label>
+      </div>
+
+      <button type="submit" class="btn submit-btn mt-4">Submit Issue</button>
+    </form>
   </div>
 
-  <button type="submit" class="btn submit-btn mt-4">Submit Issue</button>
-</form>
+  <script>
+    let map, marker;
 
+    function initMap(lat, lon) {
+      map = L.map("map").setView([lat, lon], 16);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
-  </div>
+      marker = L.marker([lat, lon], { draggable: true }).addTo(map)
+        .bindPopup("Selected Location")
+        .openPopup();
 
- <script>
-  let map, marker;
+      document.getElementById("latitude").value = lat;
+      document.getElementById("longitude").value = lon;
 
-  function initMap(lat, lon) {
-    map = L.map("map").setView([lat, lon], 16);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+      map.on("click", function (e) {
+        const newLat = e.latlng.lat;
+        const newLon = e.latlng.lng;
 
-    marker = L.marker([lat, lon], { draggable: true }).addTo(map)
-      .bindPopup("Selected Location")
-      .openPopup();
+        marker.setLatLng([newLat, newLon]).openPopup();
+        document.getElementById("latitude").value = newLat;
+        document.getElementById("longitude").value = newLon;
+      });
 
-    document.getElementById("latitude").value = lat;
-    document.getElementById("longitude").value = lon;
+      marker.on("dragend", function (e) {
+        const pos = marker.getLatLng();
+        document.getElementById("latitude").value = pos.lat;
+        document.getElementById("longitude").value = pos.lng;
+      });
+    }
 
-    // Allow user to click anywhere on the map to move the marker
-    map.on("click", function (e) {
-      const newLat = e.latlng.lat;
-      const newLon = e.latlng.lng;
-
-      marker.setLatLng([newLat, newLon]).openPopup();
-      document.getElementById("latitude").value = newLat;
-      document.getElementById("longitude").value = newLon;
-    });
-
-    // Also update lat/lon if marker is dragged manually
-    marker.on("dragend", function (e) {
-      const pos = marker.getLatLng();
-      document.getElementById("latitude").value = pos.lat;
-      document.getElementById("longitude").value = pos.lng;
-    });
-  }
-
-  // Use geolocation or default to a city center
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      function (position) {
-        initMap(position.coords.latitude, position.coords.longitude);
-      },
-      function () {
-        // Fallback location if permission denied (e.g., Ahmedabad)
-        initMap(23.0225, 72.5714);
-      }
-    );
-  } else {
-    initMap(23.0225, 72.5714);
-  }
-</script>
-
-
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          initMap(position.coords.latitude, position.coords.longitude);
+        },
+        function () {
+          initMap(23.0225, 72.5714);
+        }
+      );
+    } else {
+      initMap(23.0225, 72.5714);
+    }
   </script>
 </body>
 
