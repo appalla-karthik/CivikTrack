@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-jvrccghh&c9e&p-^)m4(u7rpin^7bv-jufo$^g++9&7xcls$dx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['civictrack-29pz.onrender.com']
+
 
 
 # Application definition
