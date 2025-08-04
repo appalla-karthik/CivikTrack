@@ -53,7 +53,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'CivikTrack.CivicTrack.urls'
+ROOT_URLCONF = 'CivicTrack.urls'
 
 TEMPLATES = [
     {
