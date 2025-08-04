@@ -1,1 +1,2 @@
-web: gunicorn CivicTrack.wsgi:application
+web: gunicorn CivicTrack.wsgi:application --log-file -
+
